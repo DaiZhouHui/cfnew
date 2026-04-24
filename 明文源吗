@@ -828,116 +828,120 @@ export default {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${t.title}</title>
-        <style>
+                <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
-                font-family: 'Inter', system-ui, -apple-system, sans-serif;
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-                color: #e2e8f0; min-height: 100vh;
-                display: flex; justify-content: center; align-items: center;
+                font-family: "SF Mono", "Fira Code", "Cascadia Code", "Courier New", monospace;
+                background: radial-gradient(ellipse at center, #0d1b0d 0%, #0a0f0a 100%);
+                color: #b8f0c8; min-height: 100vh;
                 overflow-x: hidden; position: relative;
+                display: flex; justify-content: center; align-items: center;
             }
             .matrix-bg {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+                background: transparent;
                 z-index: -1;
             }
             .matrix-code-rain {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 pointer-events: none; z-index: -1;
                 overflow: hidden;
-                display: none;
+                opacity: 0.25;
             }
             .matrix-column {
                 position: absolute; top: -100%; left: 0;
-                color: rgba(99, 102, 241, 0.4); font-family: monospace;
+                color: #4ade80; font-family: "Courier New", monospace;
                 font-size: 14px; line-height: 1.2;
-                text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+                text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
             }
             @keyframes matrix-drop {
                 0% { top: -100%; opacity: 1; }
-                10% { opacity: 1; }
+                10% { opacity: 0.8; }
                 90% { opacity: 0.2; }
                 100% { top: 100vh; opacity: 0; }
             }
-            .matrix-column:nth-child(odd) { animation-duration: 14s; animation-delay: -3s; }
-            .matrix-column:nth-child(even) { animation-duration: 20s; animation-delay: -6s; }
-            .matrix-column:nth-child(3n) { animation-duration: 22s; animation-delay: -9s; }
+            .matrix-column:nth-child(odd) { animation-duration: 12s; animation-delay: -2s; }
+            .matrix-column:nth-child(even) { animation-duration: 18s; animation-delay: -5s; }
+            .matrix-column:nth-child(3n) { animation-duration: 20s; animation-delay: -8s; }
             .terminal {
-                width: 90%; max-width: 700px; height: 480px;
-                background: rgba(15, 23, 42, 0.85);
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(99, 102, 241, 0.3);
+                width: 90%; max-width: 800px; height: 500px;
+                background: rgba(15, 23, 15, 0.7);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border: 1px solid rgba(74, 222, 128, 0.2);
                 border-radius: 16px;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(74, 222, 128, 0.1);
                 position: relative; z-index: 1;
                 overflow: hidden;
-                display: flex; flex-direction: column;
             }
             .terminal-header {
-                background: rgba(30, 41, 59, 0.7);
-                padding: 12px 16px;
-                border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+                background: rgba(0, 20, 0, 0.3);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                padding: 10px 15px;
+                border-bottom: 1px solid rgba(74, 222, 128, 0.2);
                 display: flex; align-items: center;
             }
-            .terminal-buttons { display: flex; gap: 8px; }
+            .terminal-buttons {
+                display: flex; gap: 8px;
+            }
             .terminal-button {
                 width: 12px; height: 12px; border-radius: 50%;
-                background: #ef4444; border: none;
+                background: #ff5f57; border: none;
             }
-            .terminal-button:nth-child(2) { background: #f59e0b; }
-            .terminal-button:nth-child(3) { background: #10b981; }
+            .terminal-button:nth-child(2) { background: #ffbd2e; }
+            .terminal-button:nth-child(3) { background: #28ca42; }
             .terminal-title {
-                margin-left: 16px; color: #e2e8f0;
-                font-size: 14px; font-weight: 600;
-                opacity: 0.8;
+                margin-left: 15px; color: #86efac;
+                font-size: 14px; font-weight: bold;
             }
             .terminal-body {
-                padding: 20px; flex: 1;
+                padding: 20px; height: calc(100% - 50px);
                 overflow-y: auto; font-size: 15px;
-                line-height: 1.5;
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                line-height: 1.5; color: #b8f0c8;
             }
-            .terminal-line { margin-bottom: 10px; display: flex; align-items: center; }
+            .terminal-line {
+                margin-bottom: 8px; display: flex; align-items: baseline;
+            }
             .terminal-prompt {
-                color: #6366f1; margin-right: 12px;
-                font-weight: 600; min-width: 80px;
+                color: #4ade80; margin-right: 10px;
+                font-weight: bold;
             }
             .terminal-input {
                 background: transparent; border: none; outline: none;
-                color: #e2e8f0; font-family: inherit;
+                color: #b8f0c8; font-family: "SF Mono", "Fira Code", "Courier New", monospace;
                 font-size: 15px; flex: 1;
-                caret-color: #6366f1;
+                caret-color: #4ade80;
             }
-            .terminal-input::placeholder { color: rgba(148, 163, 184, 0.6); }
+            .terminal-input::placeholder {
+                color: rgba(184, 240, 200, 0.4); opacity: 1;
+            }
             .terminal-cursor {
                 display: inline-block; width: 8px; height: 18px;
-                background: #6366f1;
-                margin-left: 4px;
+                background: #4ade80;
+                margin-left: 2px;
             }
             @keyframes blink {
                 0%, 50% { opacity: 1; }
                 51%, 100% { opacity: 0; }
             }
-            .terminal-output { color: #94a3b8; }
-            .terminal-error { color: #f87171; }
-            .terminal-success { color: #34d399; }
-            .lang-selector {
-                position: fixed; top: 20px; left: 20px; z-index: 1000;
+            .terminal-output {
+                color: #86efac; margin: 5px 0;
             }
-            .lang-selector select {
-                background: rgba(15, 23, 42, 0.9);
-                border: 1px solid rgba(99, 102, 241, 0.4);
-                color: #e2e8f0; padding: 8px 12px;
-                border-radius: 8px;
-                font-family: inherit; font-size: 14px;
-                cursor: pointer;
-                backdrop-filter: blur(8px);
+            .terminal-error {
+                color: #f87171; margin: 5px 0;
             }
-            .powered-by {
+            .terminal-success {
+                color: #4ade80; margin: 5px 0;
+            }
+            .matrix-text {
                 position: fixed; top: 20px; right: 20px;
-                color: rgba(148, 163, 184, 0.6); font-family: monospace;
+                color: rgba(74, 222, 128, 0.5); font-family: "Courier New", monospace;
                 font-size: 0.8rem;
+            }
+            @keyframes matrix-flicker {
+                0%, 100% { opacity: 0.5; }
+                50% { opacity: 0.8; }
             }
         </style>
     </head>
@@ -2608,86 +2612,119 @@ async function handleSubscriptionPage(request, user = null) {
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
-                font-family: 'Inter', system-ui, -apple-system, sans-serif;
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-                color: #cbd5e1; min-height: 100vh;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+                background: radial-gradient(ellipse at center, #0d1b0d 0%, #0a0f0a 100%);
+                color: #b8f0c8; min-height: 100vh;
                 overflow-x: hidden; position: relative;
             }
-            .container { max-width: 960px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; }
+            .matrix-bg {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: transparent;
+                z-index: -1;
+            }
+            .matrix-code-rain {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                pointer-events: none; z-index: -1;
+                overflow: hidden;
+                opacity: 0.25;
+            }
+            .matrix-column {
+                position: absolute; top: -100%; left: 0;
+                color: #4ade80; font-family: "Courier New", monospace;
+                font-size: 14px; line-height: 1.2;
+                text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+            }
+            @keyframes matrix-drop {
+                0% { top: -100%; opacity: 1; }
+                10% { opacity: 0.8; }
+                90% { opacity: 0.2; }
+                100% { top: 100vh; opacity: 0; }
+            }
+            .matrix-column:nth-child(odd) { animation-duration: 12s; animation-delay: -2s; }
+            .matrix-column:nth-child(even) { animation-duration: 18s; animation-delay: -5s; }
+            .matrix-column:nth-child(3n) { animation-duration: 20s; animation-delay: -8s; }
+            .container { max-width: 900px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
             .header { text-align: center; margin-bottom: 40px; }
             .title {
-                font-size: 2.8rem; font-weight: 700;
-                background: linear-gradient(135deg, #6366f1, #a5b4fc);
+                font-size: 3.5rem; font-weight: 900; letter-spacing: -1px;
+                background: linear-gradient(135deg, #86efac 0%, #4ade80 50%, #22c55e 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                margin-bottom: 8px;
+                margin-bottom: 10px;
+                text-shadow: none;
             }
-            .subtitle { color: #94a3b8; font-size: 1.1rem; }
+            .subtitle { color: rgba(168, 240, 184, 0.7); margin-bottom: 30px; font-size: 1.2rem; }
             .card {
-                background: rgba(15, 23, 42, 0.7);
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(99, 102, 241, 0.2);
-                border-radius: 16px; padding: 28px; margin-bottom: 20px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                background: rgba(15, 23, 15, 0.55);
+                backdrop-filter: blur(16px) saturate(180%);
+                -webkit-backdrop-filter: blur(16px) saturate(180%);
+                border: 1px solid rgba(74, 222, 128, 0.2);
+                border-radius: 16px; padding: 30px; margin-bottom: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(74, 222, 128, 0.1);
+                transition: transform 0.2s ease;
+            }
+            .card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 24px 72px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(74, 222, 128, 0.15);
             }
             .card-title {
-                font-size: 1.5rem; font-weight: 600; margin-bottom: 20px;
-                color: #e2e8f0; display: flex; align-items: center; gap: 8px;
+                font-size: 1.8rem; margin-bottom: 20px;
+                color: #86efac; font-weight: 600;
             }
             .client-grid {
-                display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 12px; margin: 20px 0;
+                display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 15px; margin: 20px 0;
             }
             .client-btn {
-                background: rgba(30, 41, 59, 0.8);
-                border: 1px solid rgba(99, 102, 241, 0.4);
-                padding: 12px 16px; color: #e2e8f0;
-                font-family: inherit; font-weight: 500;
-                cursor: pointer; border-radius: 12px;
-                text-align: center; transition: all 0.2s ease;
-                backdrop-filter: blur(4px);
+                background: rgba(20, 30, 20, 0.6);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(74, 222, 128, 0.3);
+                border-radius: 12px;
+                padding: 15px 20px; color: #b8f0c8;
+                font-family: inherit; font-weight: 600; font-size: 0.9rem;
+                cursor: pointer; transition: all 0.3s ease;
+                text-align: center; position: relative;
+                overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
             .client-btn:hover {
-                background: rgba(99, 102, 241, 0.2);
-                border-color: #818cf8;
+                background: rgba(74, 222, 128, 0.15);
+                border-color: rgba(74, 222, 128, 0.8);
+                box-shadow: 0 8px 24px rgba(74, 222, 128, 0.25);
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
             }
             .generate-btn {
-                background: rgba(99, 102, 241, 0.2);
-                border: 1px solid #6366f1;
-                padding: 10px 20px; color: #e2e8f0;
-                font-family: inherit; font-weight: 500;
-                cursor: pointer; border-radius: 12px;
-                transition: all 0.2s ease; margin-right: 12px;
+                background: rgba(74, 222, 128, 0.1);
+                border: 1px solid rgba(74, 222, 128, 0.5);
+                border-radius: 12px;
+                padding: 12px 24px;
+                color: #86efac; font-family: inherit;
+                font-weight: 600; cursor: pointer;
+                transition: all 0.3s ease; margin-right: 10px;
+                box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
             }
             .generate-btn:hover {
-                background: rgba(99, 102, 241, 0.3);
-                transform: translateY(-1px);
+                background: rgba(74, 222, 128, 0.25);
+                box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+                transform: translateY(-2px);
             }
             .subscription-url {
-                background: rgba(0, 0, 0, 0.4);
-                border: 1px solid rgba(99, 102, 241, 0.3);
-                padding: 16px; word-break: break-all;
-                font-family: 'JetBrains Mono', monospace; font-size: 13px;
-                color: #a5b4fc; margin-top: 20px; display: none;
+                background: rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(74, 222, 128, 0.25);
                 border-radius: 12px;
+                padding: 15px;
+                word-break: break-all; font-family: "SF Mono", "Fira Code", monospace;
+                color: #b8f0c8; margin-top: 20px; display: none;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+                font-size: 0.9rem;
             }
-            input, select, textarea {
-                background: rgba(15, 23, 42, 0.6);
-                border: 1px solid rgba(99, 102, 241, 0.3);
-                color: #e2e8f0; padding: 10px 14px;
-                border-radius: 10px; font-family: inherit;
-                font-size: 14px; outline: none;
-                transition: border-color 0.2s;
+            .matrix-text {
+                position: fixed; top: 20px; right: 20px;
+                color: rgba(74, 222, 128, 0.5); font-family: "Courier New", monospace;
+                font-size: 0.8rem;
             }
-            input:focus, select:focus, textarea:focus {
-                border-color: #818cf8;
-            }
-            button {
-                cursor: pointer; transition: all 0.2s;
-            }
-
         </style>
     </head>
     <body>
